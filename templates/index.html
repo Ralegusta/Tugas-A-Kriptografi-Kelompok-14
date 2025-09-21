@@ -18,6 +18,7 @@
             white-space: pre-wrap;
             word-wrap: break-word;
             min-height: 100px;
+            font-family: monospace;
         }
     </style>
 </head>
@@ -25,11 +26,18 @@
     <div class="container">
         <div class="card shadow-sm">
             <div class="card-header text-center bg-dark text-white">
-                <h3>🔒 Aplikasi Kriptografi Klasik</h3>
+                <h3>Simple Cipher</h3>
             </div>
             <div class="card-body">
-                <form action="/process" method="post" enctype="multipart/form-data">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
 
+                <form action="/" method="post" enctype="multipart/form-data">
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label class="form-label">Aksi:</label>
@@ -65,7 +73,7 @@
                     
                     <div id="text-input-group" class="mb-3">
                         <label for="text_input" class="form-label">Plaintext / Ciphertext:</label>
-                        <textarea class="form-control" name="text_input" id="text_input" rows="4"></textarea>
+                        <textarea class="form-control" name="text_input" id="text_input" rows="4">{{ text_input or '' }}</textarea>
                     </div>
 
                     <div id="file-input-group" class="mb-3" style="display: none;">
@@ -75,8 +83,8 @@
 
                     <div class="mb-3">
                         <label for="key" class="form-label">Kunci:</label>
-                        <input type="text" class="form-control" name="key" id="key" required>
-                        <div class="form-text">Contoh: Shift(3), Affine(5 8), Hill(9 4 5 7), Permutation(213)</div>
+                        <input type="text" class="form-control" name="key" id="key" required value="{{ key_input or '' }}">
+                        <div class="form-text">Contoh: Shift(angka), Affine(a b), Hill(4 atau 9 angka), Permutation(urutan angka), Vigenere(kata), Substitution(26 huruf unik)</div>
                     </div>
                     
                     <div class="d-grid">
@@ -96,7 +104,6 @@
     </div>
 
     <script>
-        // Script untuk toggle antara input teks dan file
         document.querySelectorAll('input[name="input_type"]').forEach(radio => {
             radio.addEventListener('change', function() {
                 if (this.value === 'text') {

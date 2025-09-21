@@ -1,12 +1,6 @@
-# .gitignore
-
-# Virtual Environment
 .venv/
 venv/
-
-# File environment (rahasia)
 .env
-
-# Cache Python
 __pycache__/
 *.pyc
+.vscode/
