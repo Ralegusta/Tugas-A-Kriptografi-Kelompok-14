@@ -32,6 +32,16 @@ Aplikasi web sederhana yang dibangun menggunakan Flask untuk mengenkripsi dan me
     .\.venv\Scripts\activate
     ```
 
+    Bila terjadi error, maka jalankan perintah untuk memberi izin:
+    ```bash
+    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+    ```
+
+    Setelah berhasil, langsung jalankan perintah aktivasi venv Anda:
+    ```bash
+    .\.venv\Scripts\activate
+    ```
+
 3.  **Install Dependensi**
     Pastikan virtual environment aktif (ditandai dengan adanya tulisan (.venv) berwarna hijau ), lalu jalankan:
     ```bash
@@ -42,6 +52,12 @@ Aplikasi web sederhana yang dibangun menggunakan Flask untuk mengenkripsi dan me
     ```bash
     flask run
     ```
+
+    Untuk menghentikan keluar program jalankan:
+    ```bash
+    Ctrl + C
+    ```
+    pada Terminal
 
 5.  **Buka di Browser**
     Buka browser web Anda dan kunjungi alamat `http://127.0.0.1:5000`.
