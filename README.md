@@ -33,7 +33,7 @@ Aplikasi web sederhana yang dibangun menggunakan Flask untuk mengenkripsi dan me
     ```
 
 3.  **Install Dependensi**
-    Pastikan virtual environment aktif (ditandai dengan adanya tulisan (<font color="green">.venv</font>) ), lalu jalankan:
+    Pastikan virtual environment aktif (ditandai dengan adanya tulisan (.venv) berwarna hijau ), lalu jalankan:
     ```bash
     pip install -r requirements.txt
     ```
