@@ -3,24 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Aplikasi Kriptografi Klasik</title>
+    <title>Simple Cipher</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { background-color: #f8f9fa; }
-        .container { max-width: 800px; }
-        .card { margin-top: 2rem; }
-        .form-label { font-weight: bold; }
-        .result-box {
-            background-color: #e9ecef;
-            border: 1px solid #ced4da;
-            padding: 1rem;
-            border-radius: .25rem;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            min-height: 100px;
-            font-family: monospace;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="container">
@@ -29,13 +14,7 @@
                 <h3>Simple Cipher</h3>
             </div>
             <div class="card-body">
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        {% for category, message in messages %}
-                            <div class="alert alert-{{ category }}">{{ message }}</div>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
 
                 <form action="/" method="post" enctype="multipart/form-data">
                     <div class="row mb-3">
@@ -88,17 +67,15 @@
                     </div>
                     
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">Proses</button>
+                        <button type="submit" class="btn btn-dark">Proses</button>
                     </div>
                 </form>
 
-                {% if result %}
                 <hr>
                 <div class="mt-4">
                     <h4>Hasil:</h4>
                     <div class="result-box">{{ result }}</div>
                 </div>
-                {% endif %}
             </div>
         </div>
     </div>
