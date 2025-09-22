@@ -7,7 +7,7 @@ def create_matrix_from_key(key_str):
     
     size = int(np.sqrt(len(nums)))
     if size * size != len(nums) or size not in [2, 3]:
-        raise ValueError("Kunci Hill harus berjumlah 4 (2x2) atau 9 (3x3) angka.")
+        raise ValueError("Kunci Hill harus matrix berjumlah 4 (2x2) atau 9 (3x3) angka contoh (2x2) = 1 2 3 4.")
     return np.array(nums).reshape(size, size)
 
 def matrix_mod_inverse(matrix):

@@ -13,85 +13,119 @@
             <div class="card-header text-center bg-dark text-white">
                 <h3>Simple Cipher</h3>
             </div>
-            <div class="card-body">
-                <div class="alert alert-{{ category }}">{{ message }}</div>
+            <div class="card-body p-4">
+                {% with messages = get_flashed_messages(with_categories=True) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} mb-3">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
 
                 <form action="/" method="post" enctype="multipart/form-data">
                     <div class="row mb-3">
-                        <div class="col-md-6">
+                        <div class="col-md-6 mb-3 mb-md-0">
                             <label class="form-label">Aksi:</label>
-                            <div>
-                                <input type="radio" class="form-check-input" name="action" value="encrypt" id="encrypt" checked>
-                                <label for="encrypt" class="form-check-label">Enkripsi</label>
-                                <input type="radio" class="form-check-input ms-3" name="action" value="decrypt" id="decrypt">
-                                <label for="decrypt" class="form-check-label">Dekripsi</label>
+                            <div class="pt-2">
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="action" value="encrypt" id="encrypt" checked>
+                                    <label for="encrypt" class="form-check-label">Enkripsi</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" class="form-check-input" name="action" value="decrypt" id="decrypt">
+                                    <label for="decrypt" class="form-check-label">Dekripsi</label>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <label for="cipher" class="form-label">Pilih Cipher:</label>
                             <select class="form-select" name="cipher" id="cipher">
-                                <option value="shift">Shift Cipher</option>
-                                <option value="substitution">Substitution Cipher</option>
-                                <option value="affine">Affine Cipher</option>
-                                <option value="vigenere">Vigenere Cipher</option>
-                                <option value="hill">Hill Cipher</option>
-                                <option value="permutation">Permutation Cipher</option>
+                                <option value="shift" {% if cipher_choice|default('') == 'shift' or not cipher_choice %}selected{% endif %}>Shift Cipher</option>
+                                <option value="substitution" {% if cipher_choice|default('') == 'substitution' %}selected{% endif %}>Substitution Cipher</option>
+                                <option value="affine" {% if cipher_choice|default('') == 'affine' %}selected{% endif %}>Affine Cipher</option>
+                                <option value="vigenere" {% if cipher_choice|default('') == 'vigenere' %}selected{% endif %}>Vigenere Cipher</option>
+                                <option value="hill" {% if cipher_choice|default('') == 'hill' %}selected{% endif %}>Hill Cipher</option>
+                                <option value="permutation" {% if cipher_choice|default('') == 'permutation' %}selected{% endif %}>Permutation Cipher</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Input Data:</label>
-                        <div>
-                            <input type="radio" class="form-check-input" name="input_type" value="text" id="text_radio" checked>
-                            <label for="text_radio" class="form-check-label">Teks Manual</label>
-                            <input type="radio" class="form-check-input ms-3" name="input_type" value="file" id="file_radio">
-                            <label for="file_radio" class="form-check-label">Upload File</label>
+                        <div class="pt-2">
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input" name="input_type" value="text" id="text_radio" {% if input_type|default('') == 'text' or not input_type %}checked{% endif %}>
+                                <label for="text_radio" class="form-check-label">Teks Manual</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input" name="input_type" value="file" id="file_radio" {% if input_type|default('') == 'file' %}checked{% endif %}>
+                                <label for="file_radio" class="form-check-label">Upload File</label>
+                            </div>
                         </div>
                     </div>
                     
-                    <div id="text-input-group" class="mb-3">
+                    <!-- Teks Manual -->
+                    <div id="text-input-group" class="mb-3" style="display: {% if input_type|default('') == 'file' %}none{% else %}block{% endif %};">
                         <label for="text_input" class="form-label">Plaintext / Ciphertext:</label>
-                        <textarea class="form-control" name="text_input" id="text_input" rows="4">{{ text_input or '' }}</textarea>
+                        <textarea class="form-control" name="text_input" id="text_input" rows="4">{{ text_input|default('') }}</textarea>
+                    
+                        {% if input_type == 'text' and result %}
+                        <div class="mt-3">
+                            <label class="form-label">Hasil:</label>
+                            <textarea class="form-control" rows="5" readonly>{{ result|safe }}</textarea>
+                        </div>
+                        {% endif %}
                     </div>
 
-                    <div id="file-input-group" class="mb-3" style="display: none;">
+                    <!-- Upload File -->
+                    <div id="file-input-group" class="mb-3" style="display: {% if input_type|default('') == 'file' %}block{% else %}none{% endif %};">
                         <label for="file_input" class="form-label">Pilih File:</label>
                         <input class="form-control" type="file" name="file_input" id="file_input">
                     </div>
 
                     <div class="mb-3">
-                        <label for="key" class="form-label">Kunci:</label>
-                        <input type="text" class="form-control" name="key" id="key" required value="{{ key_input or '' }}">
-                        <div class="form-text">Contoh: Shift(angka), Affine(a b), Hill(4 atau 9 angka), Permutation(urutan angka), Vigenere(kata), Substitution(26 huruf unik)</div>
+                        <label for="key" class="form-label">Key:</label>
+                        <input type="text" class="form-control" name="key" id="key" required value="{{ key_input|default('') }}">
+                        <div class="form-text">Contoh: Shift(angka), Affine(a b), Hill(Matrix 4 atau 9 angka), Permutation(urutan angka), Vigenere(kata), Substitution(26 huruf unik)</div>
                     </div>
                     
-                    <div class="d-grid">
+                    <div class="d-grid mt-4">
                         <button type="submit" class="btn btn-dark">Proses</button>
                     </div>
                 </form>
-
-                <hr>
-                <div class="mt-4">
+                
+                {% if result and input_type == 'file' %}
+                <hr class="my-4">
+                <div>
                     <h4>Hasil:</h4>
-                    <div class="result-box">{{ result }}</div>
+                    <div class="result-box">{{ result|safe }}</div>
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>
-
+    
     <script>
-        document.querySelectorAll('input[name="input_type"]').forEach(radio => {
-            radio.addEventListener('change', function() {
-                if (this.value === 'text') {
-                    document.getElementById('text-input-group').style.display = 'block';
-                    document.getElementById('file-input-group').style.display = 'none';
-                } else {
-                    document.getElementById('text-input-group').style.display = 'none';
-                    document.getElementById('file-input-group').style.display = 'block';
-                }
-            });
-        });
+    document.addEventListener("DOMContentLoaded", function () {
+        const textRadio = document.getElementById("text_radio");
+        const fileRadio = document.getElementById("file_radio");
+        const textGroup = document.getElementById("text-input-group");
+        const fileGroup = document.getElementById("file-input-group");
+
+        function toggleInput() {
+            if (textRadio.checked) {
+                textGroup.style.display = "block";
+                fileGroup.style.display = "none";
+            } else {
+                textGroup.style.display = "none";
+                fileGroup.style.display = "block";
+            }
+        }
+
+        toggleInput();
+        textRadio.addEventListener("change", toggleInput);
+        fileRadio.addEventListener("change", toggleInput);
+    });
     </script>
 </body>
 </html>
