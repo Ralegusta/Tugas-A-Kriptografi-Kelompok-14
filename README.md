@@ -60,7 +60,7 @@ Aplikasi web sederhana yang dibangun menggunakan Flask untuk mengenkripsi dan me
     pada Terminal
 
 5.  **Buka di Browser**
-    Buka browser web Anda dan kunjungi alamat `http://127.0.0.1:5000`.
+    Buka browser web Anda dan kunjungi alamat `http://127.0.0.1:8080`.
 
 ## Catatan Tambahan
 
